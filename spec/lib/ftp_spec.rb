@@ -64,7 +64,8 @@ describe "FTP Interface" do
   end
 
   it 'should make a secure connection' do
-    expect(Glynn::Ftp.new('localhost', 21, {secure: true}).send(:ftp_klass)).to eql(DoubleBagFTPS)
+    # Net:FTP supports FTPS with Ruby 2.4 and later
+    expect(Glynn::Ftp.new('localhost', 21, {secure: true}).send(:ftp_klass)).to eql(Net::FTP)
   end
 
   it 'should accept a username and password' do

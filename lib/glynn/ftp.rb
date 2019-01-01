@@ -1,5 +1,4 @@
 require 'net/ftp'
-require 'double_bag_ftps'
 
 module Glynn
   class Ftp
@@ -32,7 +31,7 @@ module Glynn
 
     def ftp_klass
       @ftp_klass ||= if secure
-        DoubleBagFTPS
+        Net::FTP
       else
         Net::FTP
       end
