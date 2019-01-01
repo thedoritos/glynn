@@ -67,6 +67,16 @@ module Glynn
     end
 
     def remove_files(ftp, local, distant)
+      return
+
+      # TODO: Fix implementation.
+      #
+      # Current impl has many bugs and hard to fix.
+      #
+      # - ftp.nslt returns paths including 'foo/.' or 'foo/..'
+      # - ftp.nslt does not return paths if they are nested too many times
+      # - The subtraction does not work if distant and local path is different
+      #
       (ftp.nlst("#{distant}/**/*") - Dir.glob("#{local}/**/*")).each do |name|
         puts "deleting " + name
         ftp.delete(name)
