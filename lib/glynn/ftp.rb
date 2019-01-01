@@ -1,5 +1,4 @@
 require 'net/ftp'
-require 'double_bag_ftps'
 
 module Glynn
   class Ftp
@@ -22,7 +21,9 @@ module Glynn
 
     private
     def connect
-      ftp_klass.open(host) do |ftp|
+      options = secure ? { ssl: true } : nil
+
+      ftp_klass.open(host, options) do |ftp|
         ftp.passive = @passive || false
         ftp.connect(host, port)
         ftp.login(username, password)
@@ -32,7 +33,7 @@ module Glynn
 
     def ftp_klass
       @ftp_klass ||= if secure
-        DoubleBagFTPS
+        Net::FTP
       else
         Net::FTP
       end

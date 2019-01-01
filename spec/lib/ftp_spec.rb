@@ -24,7 +24,7 @@ describe "FTP Interface" do
         @ftp_server ||= FakeFtpServer.new
       end
 
-      def self.open(host)
+      def self.open(host, *args)
         yield(ftp_server)
       end
     end
@@ -63,8 +63,18 @@ describe "FTP Interface" do
     expect(Glynn::Ftp.new('localhost').send(:ftp_klass)).to  eql(Net::FTP)
   end
 
-  it 'should make a secure connection' do
-    expect(Glynn::Ftp.new('localhost', 21, {secure: true}).send(:ftp_klass)).to eql(DoubleBagFTPS)
+  context 'when secure option is given' do
+    it 'should use Net::FTP' do
+      # Net:FTP supports FTPS with Ruby 2.4 and later
+      expect(Glynn::Ftp.new('localhost').send(:ftp_klass)).to eql(Net::FTP)
+    end
+
+    it 'should set ssl option' do
+      glynn = Glynn::Ftp.new('localhost', 21, {ftp_klass: @ftp_klass, secure: true})
+
+      expect(@ftp_klass).to receive(:open).with('localhost', {ssl: true})
+      glynn.send(:connect) do |ftp|; end
+    end
   end
 
   it 'should accept a username and password' do
