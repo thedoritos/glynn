@@ -21,7 +21,9 @@ module Glynn
 
     private
     def connect
-      ftp_klass.open(host) do |ftp|
+      options = secure ? { ssl: true } : nil
+
+      ftp_klass.open(host, options) do |ftp|
         ftp.passive = @passive || false
         ftp.connect(host, port)
         ftp.login(username, password)
