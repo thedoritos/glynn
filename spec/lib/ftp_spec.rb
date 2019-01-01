@@ -123,7 +123,7 @@ describe "FTP Interface" do
     end
   end
 
-  it 'should remove files which do not exist locally anymore' do
+  xit 'should remove files which do not exist locally anymore' do
     FakeFS do
       # We create the fake files and directories
       FileUtils.mkdir_p('/test/subdir') if !File.directory?('/test/subdir')
